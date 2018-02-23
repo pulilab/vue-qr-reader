@@ -1,0 +1,148 @@
+<template>
+  <div class="container" ref="container">
+    <video class="source" ref="video" :width="videoSize.width" :height="videoSize.height" controls></video>
+    <canvas ref="canvas"></canvas>
+    <button v-show="showPlay" @click="run">Play!</button>
+  </div>
+</template>
+
+<script>
+import jsQR from 'jsqr';
+
+export default {
+  name: "vue-qr-reader",
+  props: {
+    useBackCamera: {
+      type: Boolean,
+      default: true
+    },
+    stopOnScanned: {
+      type: Boolean,
+      default: true
+    },
+    drawOnFound: {
+      type: Boolean,
+      default: true
+    },
+    lineColor: {
+      type: String,
+      default: '#FF3B58'
+    },
+    lineWidth: {
+      type: Number,
+      default: 2
+    },
+    videoSize: {
+      type: Object,
+      default: () => ({ width: '320', height: '240' })
+    },
+    responsive: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      showPlay: false
+    };
+  },
+  computed: {
+    videoWH () {
+      if (this.responsive) {
+        const width = this.$refs.container.clientWidth;
+        const height = width * 0.75;
+        return {width, height}
+      }
+      return this.videoSize
+    }
+  },
+  methods: {
+    drawLine(begin, end, color) {
+      this.canvas.beginPath();
+      this.canvas.moveTo(begin.x, begin.y);
+      this.canvas.lineTo(end.x, end.y);
+      this.canvas.lineWidth = this.lineWidth;
+      this.canvas.strokeStyle = this.lineColor;
+      this.canvas.stroke();
+    },
+    drawBox (l) {
+      if (this.drawOnFound) {
+        this.drawLine(l.topLeftCorner, l.topRightCorner);
+        this.drawLine(l.topRightCorner, l.bottomRightCorner);
+        this.drawLine(l.bottomRightCorner, l.bottomLeftCorner);
+        this.drawLine(l.bottomLeftCorner, l.topLeftCorner);
+      }
+    },
+    tick() {
+      if (this.$refs.video && this.$refs.video.readyState === this.$refs.video.HAVE_ENOUGH_DATA) {
+        this.$refs.canvas.height = this.videoWH.height;
+        this.$refs.canvas.width = this.videoWH.width;
+        this.canvas.drawImage(this.$refs.video, 0, 0, this.$refs.canvas.width, this.$refs.canvas.height);
+        const imageData = this.canvas.getImageData(0, 0, this.$refs.canvas.width, this.$refs.canvas.height);
+        let code = false;
+        try {
+          code = jsQR(imageData.data, imageData.width, imageData.height);
+        } catch (e) {
+          // sometimes JSQR may fail, but we can carry on.
+          console.log(e);
+        }
+        if (code) {
+          this.drawBox(code.location);
+          this.found(code.data);
+        }
+      }
+      this.run();
+    },
+    setup () {
+      if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        this.previousCode = null;
+        this.parity = 0;
+        this.active = true;
+        this.canvas = this.$refs.canvas.getContext('2d');
+        let stream = null;
+        const facingMode = this.useBackCamera ? { exact: "environment" } : 'user';
+        const handleSuccess = stream => {
+          this.$refs.video.srcObject = stream;
+          const playPromise = this.$refs.video.play();
+          playPromise.catch(() => this.showPlay = true);
+          playPromise.then(this.run);
+        }
+        navigator.mediaDevices.getUserMedia({ video: { facingMode } }).then(handleSuccess).catch(() => {
+          navigator.mediaDevices.getUserMedia({ video: true }).then(handleSuccess);
+        });
+
+      }
+    },
+    run () {
+      if (this.active) {
+        requestAnimationFrame(this.tick);
+      }
+    },
+    found (code) {
+      if (this.previousCode !== code) {
+        this.previousCode = code;
+      } else if (this.previousCode === code ) {
+        this.parity += 1;
+      }
+      if (this.parity > 2) {
+        this.active = this.stopOnScanned ? false : true;
+        this.parity = 0;
+        this.$emit('code-scanned', code);
+      }
+    }
+  },
+  mounted () {
+    this.setup();
+  }
+};</script>
+
+<style scope>
+  .container {
+    width: 100%;
+    height: auto;
+  }
+  .source {
+    display: none;
+    opacity: 0;
+  }
+</style>
