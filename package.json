@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
-    "wc": "vue-cli-service build --target wc 'src/components/VueQRReader.vue'",
+    "wc": "vue-cli-service build --target wc 'src/components/VueQrReader.vue' && rm -rf docs/code && cp -r dist docs/code",
     "test": "vue-cli-service test",
     "lint": "vue-cli-service lint"
   },
