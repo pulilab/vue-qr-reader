@@ -19,7 +19,7 @@
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
     "dist": "rm -rf dist && yarn wc && yarn lib",
-    "lib": "vue-cli-service build --target lib && cp -r build dist/lib",
+    "lib": "vue-cli-service build --target lib 'src/components/VueQrReader.vue' && cp -r build dist/lib",
     "wc": "vue-cli-service build --target wc 'src/components/VueQrReader.vue' && cp -r build dist",
     "test": "vue-cli-service test",
     "lint": "vue-cli-service lint"
