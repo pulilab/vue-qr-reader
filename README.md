@@ -1,5 +1,5 @@
 # vue-qr-reader
-  > A vue web component to scan QR and Barcode
+  > A vue web component to scan QR
 
 See the [docs](https://pulilab.github.io/vue-qr-reader/) for more info and demo
 

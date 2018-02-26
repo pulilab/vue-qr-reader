@@ -7,11 +7,10 @@
     "email": "hosting@pulilab.com",
     "website": "http://www.pulilab.com"
   },
-  "description": "A web component written in vue to scan QR and Barcode",
+  "description": "A web component written in vue to scan QR",
   "keywords": [
     "vuejs",
     "qr",
-    "barcode",
     "scan",
     "web-component"
   ],
