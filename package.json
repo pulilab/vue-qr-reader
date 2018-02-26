@@ -14,7 +14,7 @@
     "scan",
     "web-component"
   ],
-  "main": "dist/vue-qr-reader.js",
+  "main": "dist/vue-qr-reader.min.js",
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
