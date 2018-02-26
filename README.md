@@ -17,3 +17,10 @@ See the [docs]() for more info and demo
 
 ## Credits
 > Built by [Pulilab](http://www.pulilab.com/)
+
+
+## Notes
+Ios support is still a bit shaky, it will be fixed in the next minor version without API changes.
+
+
+> Huge thanks to the author of [jsQR](https://github.com/cozmo/jsQR) for his awesome work
