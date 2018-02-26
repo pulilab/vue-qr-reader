@@ -1,8 +1,6 @@
 # vue-qr-reader
   > A vue web component to scan QR and Barcode
 
-See the [docs]() for more info and demo
-
 ## Features
   - Highly customizable
   - Support continuos scanning
