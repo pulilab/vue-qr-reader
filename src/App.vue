@@ -1,29 +1,31 @@
 <template>
   <div id="app">
-    <VueQRReader  v-on:code-scanned="codeScanned" :stop-on-scanned="false" :draw-on-found="true" :responsive="false"/>
+    <vue-qr-reader  v-on:code-scanned="codeScanned" :stop-on-scanned="false" :draw-on-found="true" :responsive="false"/>
     {{scanned}}
   </div>
 </template>
 
 <script>
-import VueQRReader from "./components/VueQRReader.vue";
+import VueQrReader from "./components/VueQrReader.vue";
 
 export default {
   name: "app",
   components: {
-    VueQRReader
+    VueQrReader
   },
-  data () {
+  data() {
     return {
-      scanned: ''
+      scanned: ""
     };
   },
   methods: {
-    codeScanned (code) {
+    codeScanned(code) {
       this.scanned = code;
     }
   }
-};</script>
+};
+</script>
 
 <style>
+
 </style>

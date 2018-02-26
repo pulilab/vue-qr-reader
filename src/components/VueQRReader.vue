@@ -1,13 +1,13 @@
 <template>
   <div class="container" ref="container">
-    <video class="source" ref="video" :width="videoSize.width" :height="videoSize.height" controls></video>
-    <canvas ref="canvas"></canvas>
+    <video v-show="showPlay" class="source" ref="video" :width="videoWH.width" :height="videoWH.height" controls></video>
+    <canvas v-show="!showPlay" ref="canvas"></canvas>
     <button v-show="showPlay" @click="run">Play!</button>
   </div>
 </template>
 
 <script>
-import jsQR from 'jsqr';
+import jsQR from "jsqr";
 
 export default {
   name: "vue-qr-reader",
@@ -26,38 +26,43 @@ export default {
     },
     lineColor: {
       type: String,
-      default: '#FF3B58'
+      default: "#FF3B58"
     },
     lineWidth: {
       type: Number,
       default: 2
     },
-    videoSize: {
-      type: Object,
-      default: () => ({ width: '320', height: '240' })
+    videoWidth: {
+      type: Number,
+      default: 320
+    },
+    videoHeight: {
+      type: Number,
+      default: 240
     },
     responsive: {
       type: Boolean,
       default: false
     }
   },
-  data () {
+  data() {
     return {
-      showPlay: false
+      showPlay: false,
+      containerWidth: null
     };
   },
   computed: {
-    videoWH () {
-      if (this.responsive) {
-        const width = this.$refs.container.clientWidth;
+    videoWH() {
+      if (this.containerWidth) {
+        const width = this.containerWidth;
         const height = width * 0.75;
-        return {width, height}
+        return { width, height };
       }
-      return this.videoSize
+      return { width: this.videoWidth, height: this.videoHeight };
     }
   },
   methods: {
-    drawLine(begin, end, color) {
+    drawLine(begin, end) {
       this.canvas.beginPath();
       this.canvas.moveTo(begin.x, begin.y);
       this.canvas.lineTo(end.x, end.y);
@@ -65,7 +70,7 @@ export default {
       this.canvas.strokeStyle = this.lineColor;
       this.canvas.stroke();
     },
-    drawBox (l) {
+    drawBox(l) {
       if (this.drawOnFound) {
         this.drawLine(l.topLeftCorner, l.topRightCorner);
         this.drawLine(l.topRightCorner, l.bottomRightCorner);
@@ -74,17 +79,31 @@ export default {
       }
     },
     tick() {
-      if (this.$refs.video && this.$refs.video.readyState === this.$refs.video.HAVE_ENOUGH_DATA) {
+      if (
+        this.$refs.video &&
+        this.$refs.video.readyState === this.$refs.video.HAVE_ENOUGH_DATA
+      ) {
         this.$refs.canvas.height = this.videoWH.height;
         this.$refs.canvas.width = this.videoWH.width;
-        this.canvas.drawImage(this.$refs.video, 0, 0, this.$refs.canvas.width, this.$refs.canvas.height);
-        const imageData = this.canvas.getImageData(0, 0, this.$refs.canvas.width, this.$refs.canvas.height);
+        this.canvas.drawImage(
+          this.$refs.video,
+          0,
+          0,
+          this.$refs.canvas.width,
+          this.$refs.canvas.height
+        );
+        const imageData = this.canvas.getImageData(
+          0,
+          0,
+          this.$refs.canvas.width,
+          this.$refs.canvas.height
+        );
         let code = false;
         try {
           code = jsQR(imageData.data, imageData.width, imageData.height);
         } catch (e) {
           // sometimes JSQR may fail, but we can carry on.
-          console.log(e);
+          console.error(e);
         }
         if (code) {
           this.drawBox(code.location);
@@ -93,56 +112,63 @@ export default {
       }
       this.run();
     },
-    setup () {
-      if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    setup() {
+      if (this.responsive) {
+        this.$nextTick(() => {
+          this.containerWidth = this.$refs.container.clientWidth;
+        });
+      }
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         this.previousCode = null;
         this.parity = 0;
         this.active = true;
-        this.canvas = this.$refs.canvas.getContext('2d');
-        let stream = null;
-        const facingMode = this.useBackCamera ? { exact: "environment" } : 'user';
+        this.canvas = this.$refs.canvas.getContext("2d");
+        const facingMode = this.useBackCamera
+          ? { exact: "environment" }
+          : "user";
         const handleSuccess = stream => {
           this.$refs.video.srcObject = stream;
           const playPromise = this.$refs.video.play();
-          playPromise.catch(() => this.showPlay = true);
+          playPromise.catch(() => (this.showPlay = true));
           playPromise.then(this.run);
-        }
-        navigator.mediaDevices.getUserMedia({ video: { facingMode } }).then(handleSuccess).catch(() => {
-          navigator.mediaDevices.getUserMedia({ video: true }).then(handleSuccess);
-        });
-
+        };
+        navigator.mediaDevices
+          .getUserMedia({ video: { facingMode } })
+          .then(handleSuccess)
+          .catch(() => {
+            navigator.mediaDevices
+              .getUserMedia({ video: true })
+              .then(handleSuccess);
+          });
       }
     },
-    run () {
+    run() {
       if (this.active) {
         requestAnimationFrame(this.tick);
       }
     },
-    found (code) {
+    found(code) {
       if (this.previousCode !== code) {
         this.previousCode = code;
-      } else if (this.previousCode === code ) {
+      } else if (this.previousCode === code) {
         this.parity += 1;
       }
       if (this.parity > 2) {
         this.active = this.stopOnScanned ? false : true;
         this.parity = 0;
-        this.$emit('code-scanned', code);
+        this.$emit("code-scanned", code);
       }
     }
   },
-  mounted () {
+  mounted() {
     this.setup();
   }
-};</script>
+};
+</script>
 
 <style scope>
-  .container {
-    width: 100%;
-    height: auto;
-  }
-  .source {
-    display: none;
-    opacity: 0;
-  }
+.container {
+  width: 100%;
+  height: auto;
+}
 </style>
