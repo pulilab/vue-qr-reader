@@ -1,3 +1,7 @@
 module.exports = {
-  lintOnSave: false
+  lintOnSave: false,
+  outputDir: 'build',
+  css: {
+    extract: false
+  }
 };
