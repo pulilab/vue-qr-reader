@@ -1,7 +1,21 @@
 {
   "name": "vue-qr-reader",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "Pulilab",
+    "email": "hosting@pulilab.com",
+    "website": "http://www.pulilab.com"
+  },
+  "description": "A web component written in vue to scan QR and Barcode",
+  "keywords": [
+    "vuejs",
+    "qr",
+    "barcode",
+    "scan",
+    "web-component"
+  ],
+  "main": "dist/vue-qr-reader.js",
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
@@ -30,5 +44,8 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
+  ],
+  "files": [
+    "dist"
   ]
 }
