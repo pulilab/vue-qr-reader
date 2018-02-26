@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-    <vue-qr-reader  v-on:code-scanned="codeScanned" :stop-on-scanned="false" :draw-on-found="true" :responsive="false"/>
+    <vue-qr-reader v-if="show"  v-on:code-scanned="codeScanned" :stop-on-scanned="true" :draw-on-found="true" :responsive="false"/>
     {{scanned}}
+    <button @click="show = !show">Toggle Video</button>
   </div>
 </template>
 
@@ -15,7 +16,8 @@ export default {
   },
   data() {
     return {
-      scanned: ""
+      scanned: "",
+      show: true
     };
   },
   methods: {
