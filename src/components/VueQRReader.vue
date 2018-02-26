@@ -48,7 +48,8 @@ export default {
   data() {
     return {
       showPlay: false,
-      containerWidth: null
+      containerWidth: null,
+      active: false
     };
   },
   computed: {
@@ -158,10 +159,28 @@ export default {
         this.parity = 0;
         this.$emit("code-scanned", code);
       }
+    },
+    fullStop() {
+      if (this.$refs.video && this.$refs.video.srcObject) {
+        this.$refs.video.srcObject.getTracks().forEach(t => t.stop())
+      }
     }
   },
   mounted() {
     this.setup();
+  },
+  beforeDestroy () {
+    this.fullStop();
+  },
+  watch: {
+    active: {
+      immediate: true,
+      handler(active) {
+          if (!active) {
+            this.fullStop();
+          }
+      }
+    }
   }
 };
 </script>
