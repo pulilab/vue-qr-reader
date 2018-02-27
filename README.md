@@ -1,13 +1,13 @@
 # vue-qr-reader
   > A vue web component to scan QR
 
-See the [docs](https://pulilab.github.io/vue-qr-reader/) for more info and demo
+See the [docs](https://pulilab.github.io/vue-qr-reader/) for a demo and further information.
 
 ## Features
   - Highly customizable
   - Support continuos scanning
   - All modern browser support
-  - IOS 11 and above support
+  - iOS 11 and above support
 
 
 ## Dependencies
@@ -20,7 +20,7 @@ See the [docs](https://pulilab.github.io/vue-qr-reader/) for more info and demo
 
 
 ## Notes
-Ios support is still a bit shaky, it will be fixed in the next minor version without API changes.
+iOS support is still a bit unstable, it will be fixed in the next minor version without API changes.
 
 
-> Huge thanks to the author of [jsQR](https://github.com/cozmo/jsQR) for his awesome work
+> Huge thanks to the author of [jsQR](https://github.com/cozmo/jsQR) for his awesome work!
