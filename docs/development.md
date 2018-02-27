@@ -1,6 +1,6 @@
 # Development
 
-!> This project uses vue-cli 3.0 that is still in beta please refer to [this article](https://github.com/vuejs/vue-cli) to install it
+!> This project uses vue-cli 3.0, which is still in beta. Please refer to [this article](https://github.com/vuejs/vue-cli) to install it.
 
 ### Contribute
 
@@ -44,7 +44,7 @@ yarn wc
 
 ## Test
 > Substitute npm run to yarn if you are using npm
-The unit test for this plugin are ran with jest.
+The unit test for this plugin are run with jest.
 
 ```shell
 yarn test
