@@ -5,7 +5,7 @@
   - Highly customizable
   - Support continuos scanning
   - All modern browser support
-  - IOS 11 and above support
+  - iOS 11 and above support
 
 
 ## Dependencies
