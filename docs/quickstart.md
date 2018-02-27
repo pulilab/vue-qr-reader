@@ -11,7 +11,7 @@ yarn add vue-qr-reader
 ```
 
 ### Usage
-> This is a web component, so to be used the only need is to include the js and then place the component in the markup
+> As this is a web component, it is only necessary to include the js and then place the component in the markup in order to be utilized.
 
 ```js
 import 'vue-qr-reader';
@@ -28,7 +28,7 @@ or
 ```
 
 
-Once a QR code is scanned the `CustomEvent`: `code-scanned` is emitted, one can listen to this event as he would do normally, for example in vue:
+Once a QR code is scanned the `CustomEvent`: `code-scanned` is emitted. One can listen to this event as he normally would, for example in vue:
 
 !> The event emitted is a `CustomEvent` and the payload is contained as the first element of the array referenced by the key `detail`
 
@@ -48,4 +48,4 @@ Once a QR code is scanned the `CustomEvent`: `code-scanned` is emitted, one can 
 </script>
 ```
 
-!> The event is emitted once if the prop `stop-on-scanned` is set to `true` (default), if the prop is set to `false` the event is emitted continuously while the QR is being detected
+!> The event is emitted once if the prop `stop-on-scanned` is set to `true` (default), if the prop is set to `false` the event is emitted continuously while the QR is being detected.
