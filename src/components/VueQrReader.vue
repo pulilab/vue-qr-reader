@@ -128,7 +128,19 @@ export default {
           ? { exact: "environment" }
           : "user";
         const handleSuccess = stream => {
-          this.$refs.video.srcObject = stream;
+          if (this.$refs.video.srcObject !== undefined) {
+            this.$refs.video.srcObject = stream
+          } else if (videoEl.mozSrcObject !== undefined) {
+            this.$refs.video.mozSrcObject = stream
+          } else if (window.URL.createObjectURL) {
+            this.$refs.video.src = window.URL.createObjectURL(stream)
+          } else if (window.webkitURL) {
+            this.$refs.video.src = window.webkitURL.createObjectURL(stream)
+          } else {
+            this.$refs.video.src = stream
+          }
+          // iOS play inline
+          this.$refs.video.playsInline = true
           const playPromise = this.$refs.video.play();
           playPromise.catch(() => (this.showPlay = true));
           playPromise.then(this.run);
