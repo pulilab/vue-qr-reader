@@ -151,7 +151,12 @@ export default {
           .catch(() => {
             navigator.mediaDevices
               .getUserMedia({ video: true })
-              .then(handleSuccess);
+              .then(handleSuccess)
+              .catch((error) => {
+                if (error) {
+                  this.$emit("error-handle", error);
+                }
+              });
           });
       }
     },
