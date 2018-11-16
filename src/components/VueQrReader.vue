@@ -153,9 +153,7 @@ export default {
               .getUserMedia({ video: true })
               .then(handleSuccess)
               .catch((error) => {
-                if (error) {
-                  this.$emit("error-captured", error);
-                }
+                this.$emit("error-captured", error);
               });
           });
       }
