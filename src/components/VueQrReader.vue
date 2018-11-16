@@ -154,7 +154,7 @@ export default {
               .then(handleSuccess)
               .catch((error) => {
                 if (error) {
-                  this.$emit("error-handle", error);
+                  this.$emit("error-captured", error);
                 }
               });
           });

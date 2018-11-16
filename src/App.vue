@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <vue-qr-reader v-if="show"  v-on:code-scanned="codeScanned" v-on:error-handle="getError" :stop-on-scanned="true" :draw-on-found="true" :responsive="false"/>
+    <vue-qr-reader v-if="show"  v-on:code-scanned="codeScanned" v-on:error-captured="errorCaptured" :stop-on-scanned="true" :draw-on-found="true" :responsive="false"/>
     {{scanned}}
     <button @click="show = !show">Toggle Video</button>
   </div>
@@ -25,7 +25,7 @@ export default {
     codeScanned(code) {
       this.scanned = code;
     },
-    getError(error) {
+    errorCaptured(error) {
       switch (error.name) {
         case 'NotAllowedError':
           this.errorMessage = 'Camera permission denied.'
