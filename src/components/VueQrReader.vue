@@ -1,5 +1,5 @@
 <template>
-  <div class="container" ref="container">
+  <div class="vue-qr-reader__container" ref="container">
     <video v-show="showPlay" class="source" ref="video" :width="videoWH.width" :height="videoWH.height" controls></video>
     <canvas v-show="!showPlay" ref="canvas"></canvas>
     <button v-show="showPlay" @click="run">Play!</button>
@@ -201,7 +201,7 @@ export default {
 </script>
 
 <style scope>
-.container {
+.vue-qr-reader__container {
   width: 100%;
   height: auto;
 }
