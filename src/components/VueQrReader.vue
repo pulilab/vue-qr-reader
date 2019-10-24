@@ -1,6 +1,13 @@
 <template>
   <div class="vue-qr-reader__container" ref="container">
-    <video v-show="showPlay" class="source" ref="video" :width="videoWH.width" :height="videoWH.height" controls></video>
+    <video
+      v-show="showPlay"
+      class="source"
+      ref="video"
+      :width="videoWH.width"
+      :height="videoWH.height"
+      controls
+    ></video>
     <canvas v-show="!showPlay" ref="canvas"></canvas>
     <button v-show="showPlay" @click="run">Play!</button>
   </div>
@@ -129,18 +136,18 @@ export default {
           : "user";
         const handleSuccess = stream => {
           if (this.$refs.video.srcObject !== undefined) {
-            this.$refs.video.srcObject = stream
+            this.$refs.video.srcObject = stream;
           } else if (videoEl.mozSrcObject !== undefined) {
-            this.$refs.video.mozSrcObject = stream
+            this.$refs.video.mozSrcObject = stream;
           } else if (window.URL.createObjectURL) {
-            this.$refs.video.src = window.URL.createObjectURL(stream)
+            this.$refs.video.src = window.URL.createObjectURL(stream);
           } else if (window.webkitURL) {
-            this.$refs.video.src = window.webkitURL.createObjectURL(stream)
+            this.$refs.video.src = window.webkitURL.createObjectURL(stream);
           } else {
-            this.$refs.video.src = stream
+            this.$refs.video.src = stream;
           }
           // iOS play inline
-          this.$refs.video.playsInline = true
+          this.$refs.video.playsInline = true;
           const playPromise = this.$refs.video.play();
           playPromise.catch(() => (this.showPlay = true));
           playPromise.then(this.run);
@@ -152,7 +159,7 @@ export default {
             navigator.mediaDevices
               .getUserMedia({ video: true })
               .then(handleSuccess)
-              .catch((error) => {
+              .catch(error => {
                 this.$emit("error-captured", error);
               });
           });
@@ -177,30 +184,30 @@ export default {
     },
     fullStop() {
       if (this.$refs.video && this.$refs.video.srcObject) {
-        this.$refs.video.srcObject.getTracks().forEach(t => t.stop())
+        this.$refs.video.srcObject.getTracks().forEach(t => t.stop());
       }
     }
   },
   mounted() {
     this.setup();
   },
-  beforeDestroy () {
+  beforeDestroy() {
     this.fullStop();
   },
   watch: {
     active: {
       immediate: true,
       handler(active) {
-          if (!active) {
-            this.fullStop();
-          }
+        if (!active) {
+          this.fullStop();
+        }
       }
     }
   }
 };
 </script>
 
-<style scope>
+<style scoped>
 .vue-qr-reader__container {
   width: 100%;
   height: auto;
